@@ -2,7 +2,6 @@ import json
 from unittest.mock import mock_open, patch
 
 from src.category import Category
-from src.product import Product
 from src.utils import create_objects_from_json, read_json
 
 
@@ -30,8 +29,16 @@ def test_create_objects_from_json_with_mock():
     ]
 
     categories = create_objects_from_json(data)
+    cat = categories[0]
+    assert isinstance(cat, Category)
+    assert cat.name == "Телевизоры"
 
-    assert isinstance(categories[0], Category)
-    assert categories[0].name == "Телевизоры"
-    assert isinstance(categories[0].products[0], Product)
-    assert categories[0].products[0].price == 50000.0
+    # Проверяем строковое представление геттера products
+    output = cat.products
+    expected_output = "LG, 50000.0 руб. Остаток: 2 шт."
+    assert output == expected_output
+
+    # Дополнительно можно проверить, что в строке есть все данные
+    assert "LG" in output
+    assert "50000.0" in output
+    assert "2" in output
