@@ -1,5 +1,6 @@
 import pytest
 
+from src.category import Category
 from src.product import Product
 
 
@@ -10,3 +11,11 @@ def sample_products() -> None:
     p2 = Product("Iphone 15", "512GB, Gray space", 210000.0, 8)
     p3 = Product("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 14)
     return [p1, p2, p3]
+
+
+@pytest.fixture
+def category_with_products(sample_products):
+    cat = Category(name="Смартфоны", description="Категория смартфонов")
+    for p in sample_products:
+        cat.add_product(p)
+    return cat

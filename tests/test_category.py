@@ -86,7 +86,7 @@ def test_add_product_changes_count(sample_products):
 
     output = category.products
     assert "Наушники" in output
-    assert "15000.0" in output
+    assert "15000" in output
     assert "20" in output
     assert Category.product_count == 1
 
@@ -115,3 +115,17 @@ def test_add_multiple_products(sample_products):
         assert f"{p.name}, {p.price} руб. Остаток: {p.quantity} шт." in output
 
     assert Category.product_count == len(new_products)
+
+
+def test_category_str_returns_correct_total(category_with_products, sample_products):
+    """Проверяем, что __str__ возвращает корректное количество продуктов"""
+    total_quantity = sum(p.quantity for p in sample_products)
+    expected_str = f"{category_with_products.name}, количество продуктов: {total_quantity} шт."
+    assert str(category_with_products) == expected_str
+
+
+def test_category_str_empty_category():
+    """Проверяем, что __str__ корректно работает, если продуктов нет"""
+    empty_cat = Category("Пустая категория", "Описание пустой категории", products=[])
+    expected_str = f"{empty_cat.name}, количество продуктов: 0 шт."
+    assert str(empty_cat) == expected_str

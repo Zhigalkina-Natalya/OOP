@@ -21,6 +21,15 @@ class Product:
         if self.quantity < 0:
             raise ValueError("quantity не может быть отрицательным")
 
+    def __str__(self) -> str:
+        return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other) -> Union[float, NotImplemented]:
+        if isinstance(other, Product):
+            total = self.price * self.quantity + other.price * other.quantity
+            return total
+        return NotImplemented
+
     @property
     def price(self) -> Decimal:
         return Decimal(str(self.__price))
