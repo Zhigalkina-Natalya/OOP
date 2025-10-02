@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Iterator, Optional
 
 from src.product import Product
 
@@ -44,5 +44,18 @@ class Category:
         result = ""
         if self.__products is not None:
             for product in self.__products:
-                result += f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт.\n"
+                result += str(product) + "\n"
         return result.strip()
+
+    def __str__(self) -> str:
+        total = 0
+        if self.__products is not None:
+            for p in self.__products:
+                total += int(p.quantity)
+        return f"{self.name}, количество продуктов: {total} шт."
+
+    def __iter__(self) -> Iterator[Product]:
+        return iter(self.__products)
+
+    def get_products(self) -> list[Product]:
+        return list(self.__products)
