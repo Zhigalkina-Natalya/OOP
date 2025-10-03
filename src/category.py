@@ -28,8 +28,20 @@ class Category:
         Category.product_count += len(self.__products)
 
     def add_product(self, product: Product) -> None:
+        """
+        Добавляет продукт в категорию. Разрешены только Product и его наследники.
+        Проверки выполняем с использованием одновременно isinstance и issubclass (через product._class_).
+        """
+        # 1) Проверяем, что передан именно экземпляр (а не, например, строка или число)
         if not isinstance(product, Product):
-            raise TypeError("Можно добавлять только объекты Product")
+            raise TypeError("Можно добавлять только объекты Product или их наследники (ожидался экземпляр)")
+
+        # 2) Дополнительная проверка с использованием issubclass: удостоверимся,
+        # что класс переданного объекта действительно является подклассом Product.
+        if not issubclass(product.__class__, Product):
+            raise TypeError("Класс объекта не является подклассом Product")
+
+        # 3) если проверки пройдены — добавляем в список
         if self.__products is None:
             self.__products = [product]
         else:
