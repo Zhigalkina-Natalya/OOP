@@ -25,12 +25,10 @@ class Product:
         return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other) -> Union[float, NotImplemented]:
-        """Складывает только из одинаковых классов продуктов.
+        """
+        Складывает только одинаковые типы продуктов (по type())
         При попытке сложения объекты разных классов выбрасывается ошибка TypeError
         """
-        if not isinstance(other, Product):
-            return NotImplemented
-        # Разрешаем складывать только объекты одного и того же класса
         if type(self) is not type(other):
             raise TypeError("Нельзя складывать продукты разных классов")
         total = self.price * self.quantity + other.price * other.quantity
