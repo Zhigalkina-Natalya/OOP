@@ -1,12 +1,12 @@
 import pytest
 
 from src.category import Category
-from src.product import Product
+from src.product import LawnGrass, Product, Smartphone
 
 
 @pytest.fixture
 def sample_products() -> None:
-    """Фикстура: создаём несколько продуктов для тестов"""
+    """Фикстура: создаём несколько базовых Product для тестов"""
     p1 = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
     p2 = Product("Iphone 15", "512GB, Gray space", 210000.0, 8)
     p3 = Product("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 14)
@@ -15,7 +15,43 @@ def sample_products() -> None:
 
 @pytest.fixture
 def category_with_products(sample_products):
+    """Фикстура: категория, в которую добавлены sample_products"""
     cat = Category(name="Смартфоны", description="Категория смартфонов")
     for p in sample_products:
         cat.add_product(p)
+    return cat
+
+
+@pytest.fixture
+def sample_smartphones():
+    """Фикстура: несколько экземпляров Smartphone"""
+    s1 = Smartphone("S1", "desc S1", 100.0, 1, 95.0, "S1Model", 128, "Black")
+    s2 = Smartphone("S2", "desc S2", 200.0, 2, 96.0, "S2Model", 256, "White")
+    return [s1, s2]
+
+
+@pytest.fixture
+def sample_grasses():
+    """Фикстура: несколько LawnGrass (экземпляров газонной травы)"""
+    g1 = LawnGrass("Grass1", "desc", 10.0, 2, "Россия", "7 дней", "Зеленый")
+    g2 = LawnGrass("Grass2", "desc", 12.5, 3, "США", "5 дней", "Темно-зеленый")
+    return [g1, g2]
+
+
+@pytest.fixture
+def category_with_smartphones(sample_smartphones):
+    """Категория, в которую добавлены смартфоны (подкласс Product)"""
+    cat = Category(name="Smartphones", description="Категория смартфонов (subclass)")
+    for s in sample_smartphones:
+        cat.add_product(s)
+    return cat
+
+
+@pytest.fixture
+def mixed_category(sample_products, sample_smartphones):
+    """Смешанная категория: product + smartphone"""
+    cat = Category("Mixed", "Смешанная категория")
+    cat.add_product(sample_products[0])  # базовый Product
+    for s in sample_smartphones:
+        cat.add_product(s)  # Smartphone — подкласс
     return cat
