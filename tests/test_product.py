@@ -133,3 +133,63 @@ def test_add_returns_decimal_with_non_integer_prices():
     # ожидаем Decimal('60.2') (возможно Decimal('60.20') — сравниваем через Decimal(str(...)))
     assert isinstance(res, Decimal)
     assert res == Decimal(str(12.5 * 4 + 3.4 * 3))
+
+
+def test_smartphone_attributes(sample_smartphones):
+    """Проверяем, что Smartphone создаётся и имеет все новые атрибуты"""
+    s1, s2 = sample_smartphones
+    assert s1.name == "S1"
+    assert s1.description == "desc S1"
+    assert s1.efficiency == pytest.approx(95.0)
+    assert s1.model == "S1Model"
+    assert s1.memory == 128
+    assert s1.color == "Black"
+    # price — Decimal через свойство price
+    assert isinstance(s1.price, Decimal)
+
+
+def test_lawngrass_attributes(sample_grasses):
+    """Проверяем, что LawnGrass создаётся и имеет свои уникальные атрибуты"""
+    g1, g2 = sample_grasses
+    assert g1.name == "Grass1"
+    assert g1.country == "Россия"
+    assert g1.germination_period == "7 дней"
+    assert g1.color == "Зеленый"
+    assert isinstance(g1.price, Decimal)
+
+
+def test_add_same_subclass_allowed(sample_smartphones):
+    """
+    Сложение двух объектов одного подкласса (Smartphone) допустимо,
+    возвращает Decimal = price*quantity + price*quantity
+    """
+    s1, s2 = sample_smartphones
+    res = s1 + s2
+    assert isinstance(res, Decimal)
+    expected = s1.price * s1.quantity + s2.price * s2.quantity
+    assert res == expected
+
+
+def test_add_different_subclasses_raises(sample_smartphones, sample_grasses):
+    """
+    Тест сложение экземпляров разных классов (Smartphone + LawnGrass) должна дать TypeError
+    """
+    s1 = sample_smartphones[0]
+    g1 = sample_grasses[0]
+    with pytest.raises(TypeError):
+        _ = s1 + g1
+
+
+def test_product_plus_product_and_product_plus_subclass_are_separate(sample_products, sample_smartphones):
+    """
+    Проверяем, что базовый Product складывается с Product,
+    а Product + Smartphone — запрещено (TypeError).
+    """
+    a = sample_products[0]
+    b = sample_products[1]
+    sum_ab = a + b
+    assert isinstance(sum_ab, Decimal)
+    # Product + Smartphone -> TypeError
+    s = sample_smartphones[0]
+    with pytest.raises(TypeError):
+        _ = a + s

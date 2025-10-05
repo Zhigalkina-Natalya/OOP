@@ -1,7 +1,7 @@
 import pytest
 
 from src.category import Category
-from src.product import Product
+from src.product import Product, Smartphone
 
 
 def test_category_initialization(sample_products):
@@ -129,3 +129,31 @@ def test_category_str_empty_category():
     empty_cat = Category("Пустая категория", "Описание пустой категории", products=[])
     expected_str = f"{empty_cat.name}, количество продуктов: 0 шт."
     assert str(empty_cat) == expected_str
+
+
+def test_category_add_accepts_subclasses_and_base(category_with_products, sample_smartphones):
+    """
+    Category.add_product должен принимать Product и его наследников (Smartphone).
+    Проверяем, что добавление смартфона в категорию с базовыми product работает.
+    """
+    cat = category_with_products
+    s = sample_smartphones[0]
+    cat.add_product(s)  # не должно бросать
+    out = cat.products
+    assert s.name in out
+
+
+def test_category_add_rejects_non_product(category_with_products):
+    """Попытка добавить не-Product объект (строка) или класс должна вызвать TypeError"""
+    cat = category_with_products
+    with pytest.raises(TypeError):
+        cat.add_product("not a product")
+    # передача класса, а не экземпляра
+    with pytest.raises(TypeError):
+        cat.add_product(Smartphone)
+
+
+def test_category_init_rejects_non_product_in_list():
+    """Category конструктор должен выбрасывать TypeError, если в initial list есть не-Product"""
+    with pytest.raises(TypeError):
+        Category("Bad", "desc", ["string", 123])

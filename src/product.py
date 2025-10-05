@@ -25,10 +25,14 @@ class Product:
         return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other) -> Union[float, NotImplemented]:
-        if isinstance(other, Product):
-            total = self.price * self.quantity + other.price * other.quantity
-            return total
-        return NotImplemented
+        """
+        Складывает только одинаковые типы продуктов (по type())
+        При попытке сложения объекты разных классов выбрасывается ошибка TypeError
+        """
+        if type(self) is not type(other):
+            raise TypeError("Нельзя складывать продукты разных классов")
+        total = self.price * self.quantity + other.price * other.quantity
+        return total
 
     @property
     def price(self) -> Decimal:
@@ -78,3 +82,39 @@ class Product:
             price=data["price"],
             quantity=int(data["quantity"]),
         )
+
+
+class Smartphone(Product):
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        price: Union[Decimal, float, str],
+        quantity: int,
+        efficiency: Union[float, int],
+        model: str,
+        memory: int,
+        color: str,
+    ) -> None:
+        super().__init__(name, description, price, quantity)
+        self.efficiency = float(efficiency)
+        self.model = str(model)
+        self.memory = int(memory)
+        self.color = str(color)
+
+
+class LawnGrass(Product):
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        price: Union[Decimal, float, str],
+        quantity: int,
+        country: str,
+        germination_period: str,
+        color: str,
+    ) -> None:
+        super().__init__(name, description, price, quantity)
+        self.country = str(country)
+        self.germination_period = str(germination_period)
+        self.color = str(color)

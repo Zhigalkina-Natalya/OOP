@@ -24,10 +24,12 @@ git clone https://github.com/Zhigalkina-Natalya/coursework_1
 
 ## Содержание файлов:
 
-Название модуля | Содержание модуля                                                          
-----------------|---------------------------------------------------------------------------
- category.py    | *class Category:*
- product.py    | *class Product:*
+Название модуля | Содержание модуля                                                           
+----------------|-----------------------------------------------------------------------------
+ category.py    | *class Category:*                                                           
+ category_iterator.py    | *class CategoryIterator:*                                                   
+ product.py    | *class Product:*, *class Smartphone(Product):*, *class LawnGrass(Product):* 
+ product.py   | Функциональность: *__init__*, *__str__*, *__add__*, *@classmethod / new_product(cls,..)*, *@property / price(self)*, *@price.setter* 
  utils.py    | *read_json*, *create_objects_from_json*
 
  
@@ -66,6 +68,48 @@ class Product:
     description: str
     price: Union[Decimal, float, str]
     quantity: int
+```
+### *class Smartphone(Product):*
+
+```
+class Smartphone(Product):
+    name: str,
+    description: str,
+    price: Union[Decimal, float, str],
+    quantity: int,
+    efficiency: Union[float, int],
+    model: str,
+    memory: int,
+    color: str
+```
+
+### *class LawnGrass(Product):*
+
+```
+class LawnGrass(Product):
+    name: str
+    description: str
+    price: Union[Decimal, float, str]
+    quantity: int,
+    country: str,
+    germination_period: str,
+    color: str
+```
+### *def __add__(self, other)*
+
+```
+Складывает только из одинаковых классов продуктов.
+При попытке сложения объекты разных классов выбрасывается ошибка TypeError
+```
+
+### *@classmethod*
+### *def new_product(cls, data, existing_products)*
+
+```commandline
+Создаёт новый продукт из словаря.
+Если продукт с таким же именем уже есть в списке existing_products:
+  - увеличивает количество (quantity)
+  - выбирает более высокую цену
 ```
 
 
