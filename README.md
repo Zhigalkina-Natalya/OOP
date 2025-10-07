@@ -28,8 +28,10 @@ git clone https://github.com/Zhigalkina-Natalya/coursework_1
 ----------------|-----------------------------------------------------------------------------
  category.py    | *class Category:*                                                           
  category_iterator.py    | *class CategoryIterator:*                                                   
- product.py    | *class Product:*, *class Smartphone(Product):*, *class LawnGrass(Product):* 
+ product.py    | *class Product(BaseProduct):*, *class Smartphone(Product):*, *class LawnGrass(Product):* 
  product.py   | Функциональность: *__init__*, *__str__*, *__add__*, *@classmethod / new_product(cls,..)*, *@property / price(self)*, *@price.setter* 
+ base_product.py| Абстрактный класс: *class BaseProduct(ABC):* + Абстрактный метод
+ print_mixin.py| *class PrintMixin():*
  utils.py    | *read_json*, *create_objects_from_json*
 
  
@@ -59,11 +61,19 @@ Returns:
     list[Category]: Список объектов `Category`, каждый из которых содержит список объектов `Product`.
 ```
 
-## Модуль product.py:
-### *class Product:*
+## Модуль base_product.py:
+### *class BaseProduct(ABC):*
 
 ```
-class Product:
+Создан базовый абстрактный класс с именем BaseProduct, который станет родительским для класса продуктов.
+Классы «Smartphone» и «LawnGrass» остаются наследниками класса Product и тем самым наследуют все свойства абстрактного класса.
+```
+
+## Модуль product.py:
+### *class Product(BaseProduct):*
+
+```
+class Product(BaseProduct):
     name: str
     description: str
     price: Union[Decimal, float, str]
@@ -112,6 +122,15 @@ class LawnGrass(Product):
   - выбирает более высокую цену
 ```
 
+## Модуль print_mixin.py.py:
+### *class PrintMixin():*
+
+```
+Класс-миксин, который при создании объекта, то есть при работе метода __init__,
+печатает в консоль информацию о том, от какого класса и с какими параметрами был создан объект.
+Например:
+Product('Продукт1', 'Описание продукта', 1200, 10)
+```
 
 ## Модуль category.py:
 ### *class Category:*
