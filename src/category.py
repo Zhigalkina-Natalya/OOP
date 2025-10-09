@@ -1,9 +1,10 @@
 from typing import Iterator, Optional
 
+from src.base_entity import BaseEntity
 from src.product import Product
 
 
-class Category:
+class Category(BaseEntity):
     name: str
     description: str
     __products: Optional[list[Product]]
@@ -11,6 +12,7 @@ class Category:
     product_count: int = 0
 
     def __init__(self, name: str, description: str, products: Optional[list[Product]] = None) -> None:
+        super().__init__(name, description)
         self.name = name
         self.description = description
         if products is None:
@@ -71,3 +73,12 @@ class Category:
 
     def get_products(self) -> list[Product]:
         return list(self.__products)
+
+    def to_dict(self) -> dict:
+        """Минимальное преобразование — реализуем требуемый абстрактный метод."""
+        products = self.get_products()
+        return {
+            "name": self.name,
+            "description": self.description,
+            "products": [p.name for p in products],
+        }

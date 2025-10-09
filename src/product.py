@@ -1,8 +1,11 @@
 from decimal import Decimal
 from typing import Union
 
+from src.base_product import BaseProduct
+from src.print_mixin import PrintMixin
 
-class Product:
+
+class Product(BaseProduct, PrintMixin):
     name: str
     description: str
     __price: Union[Decimal, float, str]  # Decimal из модуля decimal (точность при работе с деньгами)
@@ -20,6 +23,7 @@ class Product:
         self.quantity = int(quantity)
         if self.quantity < 0:
             raise ValueError("quantity не может быть отрицательным")
+        super().__init__()
 
     def __str__(self) -> str:
         return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
