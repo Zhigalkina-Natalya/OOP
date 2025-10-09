@@ -55,3 +55,19 @@ def mixed_category(sample_products, sample_smartphones):
     for s in sample_smartphones:
         cat.add_product(s)  # Smartphone — подкласс
     return cat
+
+
+@pytest.fixture
+def category_with_three_products():
+    """Категория с тремя продуктами для проверки среднего ценника"""
+    p1 = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
+    p2 = Product("Iphone 15", "512GB, Gray space", 220000.0, 8)
+    p3 = Product("Xiaomi Redmi Note 11", "1024GB, Синий", 200000.0, 14)
+    cat = Category("Тестовая категория", "Описание категории", [p1, p2, p3])
+    return cat
+
+
+@pytest.fixture
+def empty_category():
+    """Категория без товаров — для проверки ZeroDivisionError"""
+    return Category("Пустая категория", "Нет товаров", [])
