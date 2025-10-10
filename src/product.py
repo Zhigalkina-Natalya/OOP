@@ -19,10 +19,10 @@ class Product(BaseProduct, PrintMixin):
             self.__price = price
         else:
             self.__price = Decimal(str(price))
-
-        self.quantity = int(quantity)
-        if self.quantity < 0:
-            raise ValueError("quantity не может быть отрицательным")
+        if quantity > 0:
+            self.quantity = int(quantity)
+        else:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
         super().__init__()
 
     def __str__(self) -> str:

@@ -74,6 +74,12 @@ class Category(BaseEntity):
     def get_products(self) -> list[Product]:
         return list(self.__products)
 
+    def middle_price(self):
+        try:
+            return sum(p.price for p in self.__products) / len(self.__products)
+        except ZeroDivisionError:
+            return 0
+
     def to_dict(self) -> dict:
         """Минимальное преобразование — реализуем требуемый абстрактный метод."""
         products = self.get_products()

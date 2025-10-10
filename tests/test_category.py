@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 import pytest
 
 from src.category import Category
@@ -157,3 +159,23 @@ def test_category_init_rejects_non_product_in_list():
     """Category конструктор должен выбрасывать TypeError, если в initial list есть не-Product"""
     with pytest.raises(TypeError):
         Category("Bad", "desc", ["string", 123])
+
+
+def test_middle_price_correct_average(category_with_three_products):
+    """
+    Тест проверяет, что метод middle_price возвращает правильное среднее значение
+    для категории с несколькими продуктами.
+    """
+    expected = (Decimal("180000") + Decimal("220000") + Decimal("200000")) / 3
+    result = category_with_three_products.middle_price()
+
+    assert result == expected
+
+
+def test_middle_price_empty_returns_zero(empty_category):
+    """
+    Тест проверяет, что при отсутствии товаров возвращается 0,
+    а не возникает ошибка деления на ноль.
+    """
+    result = empty_category.middle_price()
+    assert result == 0
