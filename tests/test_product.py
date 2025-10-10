@@ -20,6 +20,14 @@ def test_product_negative_quantity_raises():
         Product("D", "desc", 1.0, -1)
 
 
+def test_product_zero_quantity_raises_value_error():
+    """Тест покрывает raise ValueError конкретным тестом"""
+    with pytest.raises(ValueError) as e:
+        Product("D", "desc", 1.0, 0)
+    # Проверяем точный текст ошибки
+    assert str(e.value) == "Товар с нулевым количеством не может быть добавлен"
+
+
 def test_price_setter_increase():
     """Увеличение цены"""
     product = Product("Test", "Описание", 100.0, 1)
